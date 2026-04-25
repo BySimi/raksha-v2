@@ -179,14 +179,7 @@ async function sendMessage() {
 
     const text = chatInput.value.trim();
     if (!text) return;
-    if (
-        text.includes("unconscious") ||
-        text.includes("bleeding") ||
-        text.includes("breathing") ||
-        text.includes("CPR")
-    ) {
-        addToLog(text);
-    }
+    addToLog(text);
 
     // Add user message
     const userMsg = { role: 'user', text, timestamp: Date.now() };
