@@ -120,17 +120,33 @@ export function mount() {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        // Open SMS
-        const contacts = JSON.parse(localStorage.getItem("raksha_contacts") || "[]");
-        const phone = contacts.length > 0 ? contacts[0].phone : "";
-        const body = `🚨 EMERGENCY ALERT\n\n${summary}\n\nSent via Raksha App`;
+        // Get contact from storage using your actual key
+        const contacts = JSON.parse(localStorage.getItem("sos_contacts") || "[]");
 
-        window.location.href = `sms:${phone}?body=${encodeURIComponent(body)}`;
+        if (contacts.length === 0) {
+            alert("⚠️ No emergency contact saved!\n\nGo to Contacts tab and add a contact first.\n\nSummary:\n" + summary);
+            btn.textContent = "🚨 Send Emergency Summary";
+            btn.disabled = false;
+            return;
+        }
+
+        const body = `🚨 EMERGENCY ALERT\n\n${summary}\n\nSent via Raksha App`;
+        const encoded = encodeURIComponent(body);
+
+        // Send to ALL saved contacts one by one
+        contacts.forEach((contact, index) => {
+            setTimeout(() => {
+                window.open(`sms:${contact.phone}?body=${encoded}`, '_self');
+            }, index * 1500); // slight delay between each so SMS app can process
+        });
+
     } catch (err) {
         alert("Failed: " + err.message);
     } finally {
-        btn.textContent = "🚨 Send Emergency Summary";
-        btn.disabled = false;
+        setTimeout(() => {
+            btn.textContent = "🚨 Send Emergency Summary";
+            btn.disabled = false;
+        }, contacts?.length * 1500 + 500 || 2000);
     }
 });
     // Quick action chips
