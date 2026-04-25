@@ -102,14 +102,37 @@ export function mount() {
 
     sendBtn?.addEventListener('click', sendMessage);
     document.getElementById("sendSummaryBtn")?.addEventListener("click", async () => {
+    const btn = document.getElementById("sendSummaryBtn");
+    btn.textContent = "⏳ Generating...";
+    btn.disabled = true;
+
+    try {
         const summary = await generateSummary();
 
-        alert(summary); // optional preview
+        // Download as file
+        const blob = new Blob([summary], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "emergency-summary.txt";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
 
-        window.location.href =
-            `sms:+911234567890?body=${encodeURIComponent(summary)}`;
-    });
+        // Open SMS
+        const contacts = JSON.parse(localStorage.getItem("raksha_contacts") || "[]");
+        const phone = contacts.length > 0 ? contacts[0].phone : "";
+        const body = `🚨 EMERGENCY ALERT\n\n${summary}\n\nSent via Raksha App`;
 
+        window.location.href = `sms:${phone}?body=${encodeURIComponent(body)}`;
+    } catch (err) {
+        alert("Failed: " + err.message);
+    } finally {
+        btn.textContent = "🚨 Send Emergency Summary";
+        btn.disabled = false;
+    }
+});
     // Quick action chips
     document.querySelectorAll('.quick-action-chip').forEach(chip => {
         chip.addEventListener('click', () => {
