@@ -17,7 +17,7 @@ export function render() {
     const messagesHTML = chatMessages.length > 0
         ? chatMessages.map(msg => createBubbleHTML(msg)).join('')
         : `<div class="chat-bubble ai">
-        <span>${isHindi ? '👋 मैं आपका इमरजेंसी AI असिस्टेंट हूँ। मैं इमरजेंसी में प्राथमिक चिकित्सा, सुरक्षा निर्देश और बहुत कुछ में मदद कर सकता हूँ।' : '👋 I\'m your Emergency AI Assistant. I can help you during emergencies with first-aid guidance, safety instructions, and more.'}</span>
+        <span>${isHindi ? '👋 मैं आपका इमरजेंसी AI असिस्टेंट हूँ।' : '👋 I\'m your Emergency AI Assistant. I can help you during emergencies with first-aid guidance, safety instructions, and more.'}</span>
         <span class="bubble-time">AI Assistant</span>
        </div>`;
 
@@ -46,37 +46,14 @@ export function render() {
         ${messagesHTML}
       </div>
 
-      <div class="chat-messages" id="chat-messages">
-  ${messagesHTML}
-</div>
+      <button id="sendSummaryBtn" style="width:90%;margin:10px auto;display:block;padding:12px;background:#ff3b30;color:white;border:none;border-radius:12px;font-weight:bold;font-size:14px;">
+        🚨 Send Emergency Summary
+      </button>
 
-<!-- ✅ ADD HERE -->
-<button id="sendSummaryBtn"
-  style="
-    width: 90%;
-    margin: 10px auto;
-    display: block;
-    padding: 12px;
-    background: #ff3b30;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 14px;
-  ">
-  🚨 Send Emergency Summary
-</button>
-
-<div class="chat-input-container">
-
-<div class="chat-input-container">
-        <button class="chat-voice-btn" id="voice-btn" title="Voice Input">
-          🎤
-        </button>
+      <div class="chat-input-container">
+        <button class="chat-voice-btn" id="voice-btn" title="Voice Input">🎤</button>
         <textarea class="chat-input" id="chat-input" placeholder="${isHindi ? 'अपनी इमरजेंसी बताएं...' : 'Describe your emergency...'}" rows="1"></textarea>
-        <button class="chat-send-btn" id="send-btn" title="Send">
-          ➤
-        </button>
+        <button class="chat-send-btn" id="send-btn" title="Send">➤</button>
       </div>
     </div>
   `;
